@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sentinelos/os-audit/schema/proof/1",
+  "title": "OS-Audit verdict",
+  "description": "Did an agent act on a hidden text, and the proof: Verdict.to_json() of os_audit. Keys appear in the order listed.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "obeyed", "level", "egress", "decision", "evidence"],
+  "properties": {
+    "schema_version": {"const": "1"},
+    "obeyed": {"type": "boolean"},
+    "level": {"enum": ["acted", "looked_up", "none"]},
+    "egress": {"type": "boolean"},
+    "decision": {"enum": ["go", "ask", "no-go"]},
+    "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidence"}}
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["call", "tool", "value", "reason", "acting", "egress", "decision"],
+      "properties": {
+        "call": {"type": "integer", "minimum": 0},
+        "tool": {"type": "string"},
+        "value": {"type": "string"},
+        "reason": {"enum": ["named only by the hidden text", "dictated by the hidden text", "a date only the hidden text gave",
+                            "returned by a lookup the hidden text dictated", "a secret read from a source the hidden text dictated"]},
+        "acting": {"type": "boolean"},
+        "egress": {"type": "boolean"},
+        "decision": {"enum": ["go", "ask", "no-go"]}
+      }
+    }
+  }
+}
